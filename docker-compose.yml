@@ -1,0 +1,50 @@
+services:
+  api:
+    build: .
+    command: repoagent-api
+    env_file: .env
+    environment:
+      REPOAGENT_ADK_A2A_URL: http://validation:8100
+    ports:
+      - "8000:8000"
+    volumes:
+      - repoagent-data:/app/.repoagent
+    depends_on:
+      validation:
+        condition: service_healthy
+
+  validation:
+    build: .
+    command: repoagent-adk
+    env_file: .env
+    environment:
+      REPOAGENT_ADK_A2A_URL: http://validation:8100
+      REPOAGENT_SANDBOX_MODE: local
+    ports:
+      - "8100:8100"
+    volumes:
+      - repoagent-data:/app/.repoagent
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8100/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  dashboard:
+    build: .
+    command:
+      - streamlit
+      - run
+      - src/repoagent/dashboard.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
+    environment:
+      REPOAGENT_API_URL: http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+
+volumes:
+  repoagent-data:
+

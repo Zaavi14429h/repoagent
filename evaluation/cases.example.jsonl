@@ -1,0 +1,4 @@
+# Replace repository values with local fixtures or dedicated benchmark repositories.
+{"case_id":"python-bugfix-001","repository":"C:/benchmarks/python-calculator","requirement":"Fix division so dividing by zero raises ValueError and add regression tests.","base_branch":"main","validation_commands":[["python","-m","pytest","-q"]],"tags":["python","bugfix"]}
+{"case_id":"node-feature-001","repository":"C:/benchmarks/node-todo","requirement":"Add due-date validation to the task creation API and cover invalid dates with tests.","base_branch":"main","validation_commands":[["npm","test","--","--runInBand"]],"tags":["node","feature"]}
+
