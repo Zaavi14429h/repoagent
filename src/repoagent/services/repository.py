@@ -65,15 +65,21 @@ class RepositoryService:
             raise RepositoryError(f"Run workspace already exists: {destination}")
 
         source_path = Path(source).expanduser()
-        if source_path.exists():
+        local_source = source_path.exists()
+        if local_source:
             source_value = str(source_path.resolve())
         elif source.startswith("https://"):
             source_value = source
         else:
             raise RepositoryError("Repository must be an existing local path or HTTPS URL")
 
+        clone_args = ["git", "clone", "--no-tags"]
+        # Git's local hard-link optimization can hang for Windows drive paths.
+        # Force the normal object-transfer path for reliable isolated clones.
+        if local_source:
+            clone_args.append("--no-local")
         clone = subprocess.run(
-            ["git", "clone", "--no-tags", source_value, str(destination)],
+            [*clone_args, source_value, str(destination)],
             capture_output=True,
             text=True,
             timeout=300,

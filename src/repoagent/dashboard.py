@@ -57,8 +57,9 @@ if run_id:
         columns[2].metric("Tool calls", metrics.get("tool_calls", 0))
         columns[3].metric("Duration", f"{metrics.get('duration_seconds') or 0:.1f}s")
 
-        if state.get("pull_request", {}).get("url"):
-            st.link_button("Open pull request", state["pull_request"]["url"])
+        pull_request = state.get("pull_request") or {}
+        if pull_request.get("url"):
+            st.link_button("Open pull request", pull_request["url"])
         if state.get("failure_reason"):
             st.warning(state["failure_reason"])
 
