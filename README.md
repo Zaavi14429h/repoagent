@@ -7,6 +7,10 @@ natural-language requirement into a tested, reviewed GitHub pull request:
 
 The final merge always remains a human decision.
 
+For a complete developer handover covering the architecture, every workflow stage,
+agents, MCP/A2A communication, setup, security, evaluation, deployment, limitations,
+and the teacher's rubric mapping, read **[knowledge.md](knowledge.md)**.
+
 ## Architecture
 
 ```text
